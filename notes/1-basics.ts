@@ -3,12 +3,12 @@
 /**
  * (1) x is a string, b/c we’ve initialized it
  */
-// let x = "hello world";
+let x = "hello world";
 
 /**
  * (2) reassignment is fine
  */
-// x = "hello mars";
+x = "hello mars";
 
 /**
  * (3) but if we try to change type
@@ -18,7 +18,14 @@
 /**
  * (4) let's look at const. The type is literally 'hello world'
  */
-// const y = "hello world";
+const y = "hello world";
+function foo(arg: "hello mars") {
+  console.log(arg);
+}
+// foo(y); // 🚨 ERROR
+const yObj = {
+  foo: "hello",
+};
 
 /**
  * This is called a 'string literal type'. y can never be reassigned since it's a const,
@@ -51,38 +58,38 @@
 /**
  * (8) simple array types can be expressed using []
  */
-// let aa: number[] = [];
-// aa.push(33);
+let aa: number[] = [];
+aa.push(33);
 // aa.push("abc"); // 🚨 ERROR: Argument of type '"abc"' is not assignable to parameter of type 'number'.
 
 /**
  * (9) we can even define a tuple, which has a fixed length
  */
-// let bb: [number, string, string, number] = [
-//   123,
-//   "Fake Street",
-//   "Nowhere, USA",
-//   10110
-// ];
+let bb: [number, string, string, number] = [
+  123,
+  "Fake Street",
+  "Nowhere, USA",
+  10110,
+];
 
 // bb = [1, 2, 3]; // 🚨 ERROR: Type 'number' is not assignable to type 'string'.
 
 /**
  * (10) Tuple values often require type annotations (  : [number, number] )
  */
-// const xx = [32, 31]; // number[];
-// const yy: [number, number] = [32, 31];
+const xx = [32, 31]; // number[];
+const yy: [number, number] = [32, 31];
 
 //== OBJECTS ==//
 
 /**
  * (11) object types can be expressed using {} and property names
  */
-// let cc: { houseNumber: number; streetName: string };
-// cc = {
-//   streetName: "Fake Street",
-//   houseNumber: 123
-// };
+let cc: { houseNumber: number; streetName: string };
+cc = {
+  streetName: "Fake Street",
+  houseNumber: 123,
+};
 
 // cc = {
 //   houseNumber: 33
@@ -97,18 +104,20 @@
  * (12) You can use the optional operator (?) to
  * indicate that something may or may not be there
  */
-// let dd: { houseNumber: number; streetName?: string };
-// dd = {
-//   houseNumber: 33
-// };
+let dd: { houseNumber: number; streetName?: string };
+dd = {
+  houseNumber: 33,
+  streetName: "",
+  //   x: 5 // 🚨  ERROR, not valid
+};
 
 // (13) if we want to re-use this type, we can create an interface
-// interface Address {
-//   houseNumber: number;
-//   streetName?: string;
-// }
-// // and refer to it by name
-// let ee: Address = { houseNumber: 33 };
+interface Address {
+  houseNumber: number;
+  streetName?: string;
+}
+// and refer to it by name
+let ee: Address = { houseNumber: 33 };
 
 //== UNION & INTERSECTION ==//
 
@@ -117,44 +126,44 @@
  * Sometimes we have a type that can be one of several things
  */
 
-// export interface HasPhoneNumber {
-//   name: string;
-//   phone: number;
-// }
+export interface HasPhoneNumber {
+  name: string;
+  phone: number;
+}
 
-// export interface HasEmail {
-//   name: string;
-//   email: string;
-// }
+export interface HasEmail {
+  name: string;
+  email: string;
+}
 
-// let contactInfo: HasEmail | HasPhoneNumber =
-//   Math.random() > 0.5
-//     ? {
-//         // we can assign it to a HasPhoneNumber
-//         name: "Mike",
-//         phone: 3215551212
-//       }
-//     : {
-//         // or a HasEmail
-//         name: "Mike",
-//         email: "mike@example.com"
-//       };
+let contactInfo: HasEmail | HasPhoneNumber =
+  Math.random() > 0.5
+    ? {
+        // we can assign it to a HasPhoneNumber
+        name: "Mike",
+        phone: 3215551212,
+      }
+    : {
+        // or a HasEmail
+        name: "Mike",
+        email: "mike@example.com",
+      };
 
-// contactInfo.name; // NOTE: we can only access the .name property  (the stuff HasPhoneNumber and HasEmail have in common)
+contactInfo.name; // NOTE: we can only access the .name property  (the stuff HasPhoneNumber and HasEmail have in common)
+// const someProperty = contactInfo.email || contactInfo.phone; // 🚨  ERROR, not guaranteed to be present
 
 /**
  * (15) Intersection types
  */
-// let otherContactInfo: HasEmail & HasPhoneNumber = {
-//   // we _must_ initialize it to a shape that's asssignable to HasEmail _and_ HasPhoneNumber
-//   name: "Mike",
-//   email: "mike@example.com",
-//   phone: 3215551212
-// };
+let otherContactInfo: HasEmail & HasPhoneNumber = {
+  // we _must_ initialize it to a shape that's asssignable to HasEmail _and_ HasPhoneNumber
+  name: "Mike",
+  email: "mike@example.com",
+  phone: 3215551212,
+};
 
-// otherContactInfo.name; // NOTE: we can access anything on _either_ type
-// otherContactInfo.email;
-// otherContactInfo.phone;
-// const zzz: any = {} as never;
+otherContactInfo.name; // NOTE: we can access anything on _either_ type
+otherContactInfo.email;
+otherContactInfo.phone;
 
 export default {};
