@@ -69,11 +69,11 @@ interface PhoneNumberDict {
       };
 }
 
-const d: PhoneNumberDict = {};
+// const d: PhoneNumberDict = {};
 // we can narrow types with checks
-if (d.abc) {
-  d.abc;
-}
+// if (d.abc) {
+//   d.abc;
+// }
 
 const phoneDict: PhoneNumberDict = {
   office: { areaCode: 321, num: 5551212 },
